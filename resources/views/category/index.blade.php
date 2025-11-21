@@ -1,21 +1,38 @@
 @extends('layouts.app')
-@section('title', 'Daftar Produk')
+@section('title', 'Daftar Kategori')
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
 {{-- Breadcrumb dinamis --}}
 <x-breadcrumb :items="[
-'Produk' => route('products.index'),
-'Daftar Produk' => ''
+'Kategori' => route('category.index'),
+'Daftar Kategori' => ''
 ]" />
+@if(session('success'))
+<div class="alert alert-primary alert-dismissible" role="alert">
+{{ session('success') }}
+
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-
+label="Close"></button>
+
+</div>
+@endif
 <!-- Responsive Table -->
 <div class="card">
 <div class="card-header d-flex justify-content-between align-items-center">
-<h5 class="mb-0">Daftar Produk</h5>
+<div class="d-flex align-items-center gap-2">
+<h5 class="mb-0">Daftar Kategori</h5>
+<a href="{{ route('category.create') }}" class="btn btn-primary btn-sm">
+<i class="bx bx-plus"></i> Tambah Data
+</a>
+</div>
 <!-- Search Form -->
-<form action="{{ route('products.index') }}" method="GET" class="d-flex"
+<form action="{{ route('category.index') }}" method="GET" class="d-flex"
 style="width: 300px;">
 <input type="text" name="search"
-class="form-control form-control me-2"
+
+class="w-75 pr-10 border-gray-300 rounded-md shadow-sm focus:border-blue-
+500 focus:ring focus:ring-blue-200 me-2"
+
 placeholder="Cari..."
 value="{{ request('search') }}">
 <button class="btn btn-primary btn-sm" type="submit">
@@ -29,47 +46,31 @@ value="{{ request('search') }}">
 <thead>
 <tr>
 <th>No</th>
-<th>Foto</th>
 <th>Nama</th>
-<th>Kategori</th>
-<th>Deskripsi</th>
-<th>Harga</th>
-<th>Stok</th>
 <th>Actions</th>
 </tr>
 </thead>
 <tbody>
-@foreach ($products as $product)
+@foreach ($categories as $category)
 <tr>
-<td>{{ $loop->iteration + ($products->currentPage() - 1) * $products->perPage() }}</td>
+<td>{{ $loop->iteration + ($categories->currentPage() - 1) * $categories->perPage() }}</td>
+
+<td>{{ $category->nama }}</td>
 <td>
-@if($product->foto)
-<img src="{{ $product->foto
-? asset('storage/' . $product->foto)
-: asset('assets/img/default-product.png') }}"
-alt="{{ $product->nama }}" class="img-thumbnail" width="80" />
-@endif
-</td>
-<td>{{ $product->nama }}</td>
-<td>{{ $product->kategori ? $product->kategori->nama : '-' }}</td>
-<td>{{ Str::limit($product->deskripsi, 50) }}</td>
-<td>{{ number_format($product->harga) }}</td>
-<td>{{ $product->stok }}</td>
-<td>
-<a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm
+<a href="{{ route('category.edit', $category->id) }}" class="btn btn-sm
 
 btn-primary">
 
 <i class="bx bx-edit"></i>
 </a>
-<form id="delete-form-{{ $product->id }}" action="{{
+<form id="delete-form-{{ $category->id }}" action="{{
 
-route('products.destroy', $product->id) }}" method="POST" style="display:inline;">
+route('category.destroy', $category->id) }}" method="POST" style="display:inline;">
 
 @csrf
 @method('DELETE')
 <button type="button" class="btn btn-sm btn-danger"
-onclick="deleteConfirm('{{ $product->id }}', '{{ $product->name }}')">
+onclick="deleteConfirm('{{ $category->id }}', '{{ $category->nama }}')">
 
 <i class="bx bx-trash"></i>
 </button>
@@ -82,7 +83,7 @@ onclick="deleteConfirm('{{ $product->id }}', '{{ $product->name }}')">
 </div>
 <!-- Pagination -->
 <div class="mt-3 d-flex justify-content-center">
-{{ $products->links('pagination::bootstrap-5') }}
+{{ $categories->links('pagination::bootstrap-5') }}
 </div>
 </div>
 </div>
