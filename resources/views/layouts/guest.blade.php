@@ -27,7 +27,7 @@
                     <div class="card-body">
                         <div class="app-brand justify-content-center mb-4">
                             <a href="{{ url('/') }}" class="app-brand-link gap-2">
-                                <span class="app-brand-text demo text-body fw-bolder">TokoKu</span>
+                                <span class="app-brand-text demo text-body fw-bolder">Toko Juna</span>
                             </a>
                         </div>
                         {{ $slot }}
